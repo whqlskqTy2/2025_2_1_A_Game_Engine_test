@@ -525,7 +525,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7312986264027627992, guid: 73d8a68c721a5ba44be95ac90b6dcc5d,
     type: 3}
   projectileSpeed: 22
-  projectileDamage: 1
+  projectileDamage: 2
   shootCooldown: 0.18
   holdToFire: 1
 --- !u!114 &346410368
@@ -681,6 +681,7 @@ GameObject:
   - component: {fileID: 689851514}
   - component: {fileID: 689851519}
   - component: {fileID: 689851518}
+  - component: {fileID: 689851521}
   - component: {fileID: 689851520}
   m_Layer: 0
   m_Name: Enemy
@@ -830,10 +831,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 689851512}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e2b93f8470bd44aaf6564fa3b5dac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  detectRange: 18
+  shootRange: 16
+  lineOfSightMask:
+    serializedVersion: 2
+    m_Bits: 0
+  shootCooldown: 1
+  projectileSpeed: 18
+  projectileDamage: 1
+  turnSpeed: 10
+--- !u!114 &689851521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689851512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e142037e3edcb154b9bfd382e2bc942d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 5
+  maxHP: 50
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
