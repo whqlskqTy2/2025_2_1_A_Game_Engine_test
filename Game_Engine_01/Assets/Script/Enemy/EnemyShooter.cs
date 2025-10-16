@@ -59,7 +59,7 @@ public class EnemyShooter : MonoBehaviour
     bool HasLineOfSight()
     {
         if (!firePoint) return false;
-        Vector3 dir = (player.position + Vector3.up * 1.2f) - firePoint.position;
+        Vector3 dir = (player.position + Vector3.up) - firePoint.position;
         if (Physics.Raycast(firePoint.position, dir.normalized, out RaycastHit hit, shootRange, lineOfSightMask, QueryTriggerInteraction.Ignore))
         {
             // 라인오브사이트 막힘
@@ -72,7 +72,7 @@ public class EnemyShooter : MonoBehaviour
     {
         if (!projectilePrefab || !firePoint) return;
 
-        Vector3 targetPos = player.position + Vector3.up * 1.2f;
+        Vector3 targetPos = player.position;
         Vector3 dir = (targetPos - firePoint.position).normalized;
 
         var go = Instantiate(projectilePrefab, firePoint.position, Quaternion.LookRotation(dir));
