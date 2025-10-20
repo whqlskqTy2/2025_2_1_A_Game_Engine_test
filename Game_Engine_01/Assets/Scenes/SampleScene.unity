@@ -1244,7 +1244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621d7d6398b78224c86e5baeec92af9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 10
+  maxHP: 1
   currentHP: 0
   onDamaged:
     m_PersistentCalls:
@@ -1254,6 +1254,8 @@ MonoBehaviour:
       m_Calls: []
   hitEffect: {fileID: 0}
   destroyEffect: {fileID: 0}
+  destroySelfOnZeroHP: 1
+  destroyDelay: 0
 --- !u!65 &1114519333
 BoxCollider:
   m_ObjectHideFlags: 0
