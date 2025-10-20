@@ -6,59 +6,64 @@ using UnityEngine;
 public class EnemyFollow : MonoBehaviour
 {
     [Header("Target")]
-    public Transform player;             // 따라갈 대상(플레이어)
-    public float followRange = 15f;      // 추적 시작 거리
-    public float stopDistance = 2.5f;    // 너무 가까워지면 멈춤
+    public Transform target;              // ← 비워두면 태그로 자동 탐색
+    public string targetTag = "Treasure"; // 보물에 이 태그 붙이기
 
-    [Header("Movement")]
-    public float moveSpeed = 3f;         // 이동 속도
-    public float gravity = -18f;         // 중력
+    [Header("Follow")]
+    public float followRange = 15f;
+    public float stopDistance = 2.5f;
+    public float moveSpeed = 3f;
+    public float gravity = -18f;
+    public bool rotateOnlyY = true;
 
-    private CharacterController controller;
-    private Vector3 velocity;
+    CharacterController cc;
+    Vector3 velocity;
+
+    void Awake()
+    {
+        cc = GetComponent<CharacterController>();
+    }
 
     void Start()
     {
-        controller = GetComponent<CharacterController>();
-        if (player == null)
+        if (target == null)
         {
-            // 자동으로 Player 태그를 가진 오브젝트 탐색
-            GameObject p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) player = p.transform;
+            var t = GameObject.FindGameObjectWithTag(targetTag);
+            if (t) target = t.transform;
         }
     }
 
     void Update()
     {
-        if (player == null) return;
+        if (!target) return;
 
-        float distance = Vector3.Distance(transform.position, player.position);
-
-        if (distance <= followRange && distance > stopDistance)
-        {
-            // 플레이어 방향으로 이동
-            Vector3 dir = (player.position - transform.position).normalized;
-            dir.y = 0f; // 평면 이동
-
-            controller.Move(dir * moveSpeed * Time.deltaTime);
-
-            // 플레이어 쪽으로 회전
-            Quaternion lookRot = Quaternion.LookRotation(dir, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, 10f * Time.deltaTime);
-        }
-
-        // 중력 적용
-        if (controller.isGrounded && velocity.y < 0) velocity.y = -2f;
+        // 간이 중력
+        if (cc.isGrounded && velocity.y < 0) velocity.y = -2f;
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
-    }
 
-    // 디버그용 시각화
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, followRange);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, stopDistance);
+        float dist = Vector3.Distance(transform.position, target.position);
+        if (dist <= followRange && dist > stopDistance)
+        {
+            Vector3 to = (target.position - transform.position);
+            if (rotateOnlyY) to.y = 0;
+
+            // 회전
+            if (to.sqrMagnitude > 0.0001f)
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(to),
+                    Time.deltaTime * 8f
+                );
+
+            // 이동
+            Vector3 move = to.normalized * moveSpeed;
+            move.y = velocity.y;
+            cc.Move(move * Time.deltaTime);
+        }
+        else
+        {
+            // 제자리에서도 중력 적용
+            cc.Move(new Vector3(0, velocity.y, 0) * Time.deltaTime);
+        }
     }
 }
