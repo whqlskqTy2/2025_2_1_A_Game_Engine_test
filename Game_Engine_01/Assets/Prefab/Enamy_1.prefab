@@ -86,7 +86,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -695,11 +695,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b484a7e96eb2ec48806a7a9f7b01dda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  target: {fileID: 0}
+  targetTag: Treasure
   followRange: 15
   stopDistance: 2.5
   moveSpeed: 3
   gravity: -18
+  rotateOnlyY: 1
 --- !u!114 &7367465896618278166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,6 +759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09e2b93f8470bd44aaf6564fa3b5dac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  targetTag: Treasure
   firePoint: {fileID: 1639582867684700587}
   projectilePrefab: {fileID: 7312986264027627992, guid: 0d3638b236bd24c408ddc535b1e185c8,
     type: 3}
