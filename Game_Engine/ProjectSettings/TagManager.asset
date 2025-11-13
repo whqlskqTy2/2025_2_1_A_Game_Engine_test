@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Nnemy
+  - Block
   layers:
   - Default
   - TransparentFX
