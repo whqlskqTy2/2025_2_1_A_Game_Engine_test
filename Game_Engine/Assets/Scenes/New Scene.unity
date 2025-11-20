@@ -295,6 +295,7 @@ MonoBehaviour:
   toolDamage: 1
   hitCooldown: 0.15
   inventory: {fileID: 0}
+  placeKey: 324
 --- !u!114 &11241193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,10 +484,12 @@ MonoBehaviour:
   - {fileID: 871112915}
   SlotItem: {fileID: 601042226519704775, guid: 0cb010a0cd7be2a46897c9d52865ddf9, type: 3}
   dirtIcon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  grassIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  grassIcon: {fileID: 21300000, guid: ad86c60d73466d74f80ef7ba3be56c6b, type: 3}
   waterIcon: {fileID: 0}
   diamondIcon: {fileID: 0}
   targetInventory: {fileID: 11241193}
+  Items: []
+  selectedIndex: -1
 --- !u!4 &601946291
 Transform:
   m_ObjectHideFlags: 0

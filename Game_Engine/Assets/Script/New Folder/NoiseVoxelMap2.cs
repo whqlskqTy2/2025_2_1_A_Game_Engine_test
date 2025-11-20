@@ -4,18 +4,65 @@ using UnityEngine;
 
 public class NoiseVoxelMap2 : MonoBehaviour
 {
+    [Header("Block Prefabs")]
     public GameObject dirtPrefab;
     public GameObject grassPrefab;
     public GameObject waterPrefab;
     public GameObject mineral;
 
+    [Header("Map Settings")]
     public int width = 20;
     public int depth = 20;
     public int maxHeight = 16;
     [SerializeField] float noiseScale = 20f;
-    [SerializeField] int waterHeight = 4; // 물 높이 기준선
+    [SerializeField] int waterHeight = 4;
+
+    GameObject GetPrefab(BlockType type)
+    {
+        return type switch
+        {
+            BlockType.Dirt => dirtPrefab,
+            BlockType.Grass => grassPrefab,
+            BlockType.Water => waterPrefab,
+            _ => null
+        };
+    }
 
     void Start()
+    {
+        GenerateMap();
+        SpawnTestBlocks(); //  BlockSpawner 
+    }
+
+    public void PlaceTile(Vector3Int pos, BlockType type)
+    {
+        GameObject prefab = GetPrefab(type);
+
+        if (prefab == null)
+        {
+            Debug.LogError($" 해당 BlockType의 Prefab 없음 : {type}");
+            return;
+        }
+
+        // 이미 블록이 있는지 체크 (겹치는 설치 방지)
+        Collider[] hits = Physics.OverlapBox(
+            pos,
+            Vector3.one * 0.45f,
+            Quaternion.identity
+        );
+
+        if (hits.Length > 0)
+        {
+            Debug.Log("이미 블록이 존재해서 설치할 수 없음");
+            return;
+        }
+
+        // 설치
+        Place(prefab, type, pos.x, pos.y, pos.z);
+        Debug.Log($"설치됨 : {type} at {pos}");
+    }
+
+    void GenerateMap()
     {
         float offsetX = Random.Range(-9999f, 9999f);
         float offsetZ = Random.Range(-9999f, 9999f);
@@ -33,14 +80,13 @@ public class NoiseVoxelMap2 : MonoBehaviour
                 // 땅 생성
                 for (int y = 0; y < h; y++)
                 {
-                    // 최상단 블록이면 Grass, 아니면 Dirt
                     if (y == h - 1)
                         Place(grassPrefab, BlockType.Grass, x, y, z);
                     else
                         Place(dirtPrefab, BlockType.Dirt, x, y, z);
                 }
 
-                // 물 채우기: 일정 높이 이하에 블록이 없으면 물 배치
+                // 물 생성
                 for (int y = h; y < waterHeight; y++)
                 {
                     Place(waterPrefab, BlockType.Water, x, y, z);
@@ -49,17 +95,25 @@ public class NoiseVoxelMap2 : MonoBehaviour
         }
     }
 
-    // --- 수정된 Place() ---
+
+    void SpawnTestBlocks()
+    {
+        Vector3 start = new Vector3(-2, 0, 0);
+
+        Place(dirtPrefab, BlockType.Dirt, (int)start.x, (int)start.y, (int)start.z);
+        Place(grassPrefab, BlockType.Grass, (int)start.x + 2, (int)start.y, (int)start.z);
+        Place(waterPrefab, BlockType.Water, (int)start.x + 4, (int)start.y, (int)start.z);
+    }
+
+  
     private void Place(GameObject prefab, BlockType type, int x, int y, int z)
     {
         var go = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity, transform);
         go.name = $"{prefab.name}_{x}_{y}_{z}";
 
-        // Block 컴포넌트 세팅
         var b = go.GetComponent<Block>() ?? go.AddComponent<Block>();
         b.type = type;
 
-        // 블록 타입별 설정
         switch (type)
         {
             case BlockType.Dirt:
@@ -77,7 +131,7 @@ public class NoiseVoxelMap2 : MonoBehaviour
             case BlockType.Water:
                 b.maxHP = 1;
                 b.dropCount = 0;
-                b.mineable = false; // 물은 채굴 불가
+                b.mineable = false;
                 break;
         }
     }

@@ -5,8 +5,13 @@ using System;              //  꼭 추가
 
 public class Inventory : MonoBehaviour
 {
-    public Dictionary<BlockType, int> items = new();
+    public Dictionary<BlockType, int> items = new Dictionary<BlockType, int>();
+    InventoryUI invenUI;
 
+    void Start()
+    {
+        invenUI = FindObjectOfType<InventoryUI>();
+    }
     // 인벤토리 변경 시 알려줄 이벤트
     public event Action<Inventory> OnInventoryChanged;
 
@@ -24,6 +29,12 @@ public class Inventory : MonoBehaviour
         if (!items.TryGetValue(type, out var have) || have < count) return false;
         items[type] = have - count;
         Debug.Log($"[Inventory] -{count} {type} (총 {items[type]})");
+        if (items[type] == 0)
+        {
+            items.Remove(type);
+            invenUI.selectedIndex = -1;
+            invenUI.ResetSelection();
+        }
 
         OnInventoryChanged?.Invoke(this);   // 여기도 있으면 좋음
         return true;
