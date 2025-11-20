@@ -17,7 +17,7 @@ public class InventoryUI : MonoBehaviour
     public Sprite waterIcon;
     public Sprite diamondIcon;
 
-    // ★ 인벤토리 참조
+    //  인벤토리 참조
     public Inventory targetInventory;
 
     void OnEnable()
