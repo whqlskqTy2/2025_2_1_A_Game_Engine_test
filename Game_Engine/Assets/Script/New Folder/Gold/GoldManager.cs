@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GoldManager : MonoBehaviour
@@ -25,7 +26,6 @@ public class GoldManager : MonoBehaviour
     {
         gold += amount;
         Debug.Log($"[Gold] +{amount} → 현재 골드: {gold}");
-        // 나중에 골드 UI 있으면 여기서 갱신 호출
     }
 
     public bool SpendGold(int amount)

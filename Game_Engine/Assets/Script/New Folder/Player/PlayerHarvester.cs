@@ -18,12 +18,12 @@ public class PlayerHarvester : MonoBehaviour
     {
         _cam = Camera.main;
 
+   
         if (inventory == null)
-            inventory = gameObject.AddComponent<Inventory>();
+            inventory = GetComponent<Inventory>();
 
         invenUI = FindAnyObjectByType<InventoryUI>();
     }
-
     void Update()
     {
         // -------------------------------

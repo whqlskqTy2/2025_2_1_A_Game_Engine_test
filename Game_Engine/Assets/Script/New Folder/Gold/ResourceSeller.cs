@@ -18,8 +18,25 @@ public class ResourceSeller : MonoBehaviour
 
     private bool playerInRange = false;
 
+    private void Start()
+    {
+        if (playerInventory == null)
+        {
+            playerInventory = FindObjectOfType<PlayerHarvester>().inventory;
+            Debug.Log("[ResourceSeller] 인벤토리를 자동으로 PlayerHarvester에서 가져옴.");
+        }
+    }
     private void Update()
     {
+        if (!playerInRange) return;
+
+        if (Input.GetKeyDown(sellKey))
+        {
+            SellAllResources();
+        }
+        if (playerInventory != null)
+            Debug.Log($"[체크] ResourceSeller가 보고 있는 인벤 수량: {playerInventory.items.Count}");
+
         if (!playerInRange) return;
 
         if (Input.GetKeyDown(sellKey))
@@ -48,6 +65,8 @@ public class ResourceSeller : MonoBehaviour
 
     public void SellAllResources()
     {
+        Debug.Log("[Sell] SellAllResources 호출됨.");
+
         if (playerInventory == null)
         {
             Debug.LogWarning("ResourceSeller: playerInventory 가 설정되지 않았습니다.");
@@ -62,41 +81,39 @@ public class ResourceSeller : MonoBehaviour
 
         int totalGold = 0;
 
-        // 딕셔너리 수정하면서 돌면 에러나니까, 키를 따로 복사
-        List<BlockType> keys = new List<BlockType>(playerInventory.items.Keys);
+        var snapshot = new List<KeyValuePair<BlockType, int>>(playerInventory.items);
+        Debug.Log($"[Sell] 현재 인벤토리 아이템 개수: {snapshot.Count}");
 
-        foreach (BlockType type in keys)
+        foreach (var pair in snapshot)
         {
-            int count = playerInventory.items[type];
-            if (count <= 0) continue;
+            BlockType type = pair.Key;
+            int count = pair.Value;
 
+            Debug.Log($"[Sell] 루프 진입: {type} x{count}");
+
+            if (count <= 0) continue;
             int price = GetPrice(type);
             if (price <= 0) continue;
 
             int gain = price * count;
             totalGold += gain;
 
-            // 인벤토리에서 해당 타입 제거
-            playerInventory.items.Remove(type);
+            playerInventory.Consume(type, count);
+
             Debug.Log($"[Sell] {type} x{count} → {gain} Gold");
         }
 
-        if (totalGold > 0)
-        {
-            GoldManager.Instance.AddGold(totalGold);
-        }
-        else
-        {
-            Debug.Log("[Sell] 판매할 자원이 없습니다.");
-        }
+        Debug.Log($"[Sell] 총 골드 획득: {totalGold}");
 
-        // 인벤토리 UI만 다시 그린다 (Inventory 이벤트는 내부 Add/Consume 때만 실행)
+        // 여기서 무조건 AddGold 호출
+        GoldManager.Instance.AddGold(totalGold);
+        Debug.Log("[Sell] AddGold 호출 완료");
+
         if (inventoryUI != null)
         {
             inventoryUI.UpdateInventory(playerInventory);
         }
     }
-
     private int GetPrice(BlockType type)
     {
         switch (type)
@@ -107,4 +124,5 @@ public class ResourceSeller : MonoBehaviour
             default: return 0;
         }
     }
+
 }
