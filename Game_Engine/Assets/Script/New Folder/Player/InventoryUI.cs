@@ -16,7 +16,6 @@ public class InventoryUI : MonoBehaviour
     public Sprite dirtIcon;
     public Sprite grassIcon;
     public Sprite waterIcon;
-    public Sprite diamondIcon;
 
     // 인벤토리 참조
     public Inventory targetInventory;
@@ -60,13 +59,15 @@ public class InventoryUI : MonoBehaviour
             SlotItemPrefab sItem = go.GetComponent<SlotItemPrefab>();
 
             Sprite icon = null;
-            string label = "";
+
+            // 아이템 수량 표시 (이름 대신)
+            string label = item.Value.ToString();
 
             switch (item.Key)
             {
-                case BlockType.Dirt: icon = dirtIcon; label = "Dirt"; break;
-                case BlockType.Grass: icon = grassIcon; label = "Grass"; break;
-                case BlockType.Water: icon = waterIcon; label = "Water"; break;
+                case BlockType.Dirt: icon = dirtIcon; break;
+                case BlockType.Grass: icon = grassIcon; break;
+                case BlockType.Water: icon = waterIcon; break;
             }
 
             if (sItem != null)
@@ -103,7 +104,6 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        // 슬롯 선택
         SetSelection(idx);
         selectedIndex = idx;
     }
@@ -123,6 +123,8 @@ public class InventoryUI : MonoBehaviour
 
     public BlockType GetInventorySlot()
     {
-        return items[selectedIndex].GetComponent<SlotItemPrefab>().blockType;
+        return items[selectedIndex]
+            .GetComponent<SlotItemPrefab>()
+            .blockType;
     }
 }
