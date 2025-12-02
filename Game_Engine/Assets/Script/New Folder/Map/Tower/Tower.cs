@@ -9,6 +9,10 @@ public class Tower : MonoBehaviour
     public float fireRate = 1f;      // 초당 공격 횟수
     public int damage = 3;           // 한 번 공격 시 대미지
 
+    [Header("발사 이펙트")]
+    public Transform firePoint;          // ★ 총구 위치
+    public GameObject projectilePrefab;  // ★ 탄환 프리팹
+
     private float fireCooldown = 0f;
 
     void Update()
@@ -28,7 +32,6 @@ public class Tower : MonoBehaviour
 
     EnemyStatus FindTargetInRange()
     {
-        // 사거리 안의 모든 콜라이더를 찾는다.
         Collider[] hits = Physics.OverlapSphere(transform.position, attackRange);
 
         EnemyStatus closest = null;
@@ -37,7 +40,7 @@ public class Tower : MonoBehaviour
         foreach (Collider hit in hits)
         {
             EnemyStatus enemy = hit.GetComponent<EnemyStatus>();
-            if (enemy == null) continue; // 적이 아니면 무시
+            if (enemy == null) continue;
 
             float dist = Vector3.Distance(transform.position, enemy.transform.position);
             if (dist < closestDist)
@@ -54,13 +57,26 @@ public class Tower : MonoBehaviour
     {
         if (target == null) return;
 
-        // 여기서는 그냥 즉시 대미지
-        target.TakeDamage(damage);
+        if (projectilePrefab != null)
+        {
+            // firePoint가 있으면 그 위치에서, 없으면 타워 위치에서 발사
+            Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
 
-        // TODO: 나중에 여기서 이펙트, 총알 프리팹, 사운드 재생 등 추가
+            GameObject projObj = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+            Projectile proj = projObj.GetComponent<Projectile>();
+
+            if (proj != null)
+            {
+                proj.SetTarget(target, damage);
+            }
+        }
+        else
+        {
+            // 프리팹 없으면 그냥 히트스캔처럼 즉시 대미지
+            target.TakeDamage(damage);
+        }
     }
 
-    // 씬에서 사거리 보이게
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
