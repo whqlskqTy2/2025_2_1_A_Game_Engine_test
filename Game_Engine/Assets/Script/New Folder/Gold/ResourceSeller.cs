@@ -81,12 +81,12 @@ public class ResourceSeller : MonoBehaviour
 
         int totalGold = 0;
 
-        var snapshot = new List<KeyValuePair<BlockType, int>>(playerInventory.items);
+        var snapshot = new List<KeyValuePair<ItemType, int>>(playerInventory.items);
         Debug.Log($"[Sell] 현재 인벤토리 아이템 개수: {snapshot.Count}");
 
         foreach (var pair in snapshot)
         {
-            BlockType type = pair.Key;
+            ItemType type = pair.Key;
             int count = pair.Value;
 
             Debug.Log($"[Sell] 루프 진입: {type} x{count}");
@@ -114,13 +114,13 @@ public class ResourceSeller : MonoBehaviour
             inventoryUI.UpdateInventory(playerInventory);
         }
     }
-    private int GetPrice(BlockType type)
+    private int GetPrice(ItemType type)
     {
         switch (type)
         {
-            case BlockType.Dirt: return dirtPrice;
-            case BlockType.Grass: return grassPrice;
-            case BlockType.Water: return waterPrice;
+            case ItemType.Dirt: return dirtPrice;
+            case ItemType.Grass: return grassPrice;
+            case ItemType.Water: return waterPrice;
             default: return 0;
         }
     }

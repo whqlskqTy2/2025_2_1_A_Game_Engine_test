@@ -65,9 +65,9 @@ public class InventoryUI : MonoBehaviour
 
             switch (item.Key)
             {
-                case BlockType.Dirt: icon = dirtIcon; break;
-                case BlockType.Grass: icon = grassIcon; break;
-                case BlockType.Water: icon = waterIcon; break;
+                case ItemType.Dirt: icon = dirtIcon; break;
+                case ItemType.Grass: icon = grassIcon; break;
+                case ItemType.Water: icon = waterIcon; break;
             }
 
             if (sItem != null)
@@ -121,7 +121,7 @@ public class InventoryUI : MonoBehaviour
         Slot[idx].GetComponent<Image>().color = Color.yellow;
     }
 
-    public BlockType GetInventorySlot()
+    public ItemType GetInventorySlot()
     {
         return items[selectedIndex]
             .GetComponent<SlotItemPrefab>()

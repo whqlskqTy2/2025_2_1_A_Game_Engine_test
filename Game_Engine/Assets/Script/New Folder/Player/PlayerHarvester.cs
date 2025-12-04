@@ -62,7 +62,7 @@ public class PlayerHarvester : MonoBehaviour
             {
                 Vector3Int placePos = AdjacentCellOnHitFace(hit);
 
-                BlockType selected = invenUI.GetInventorySlot();
+                ItemType selected = invenUI.GetInventorySlot();
 
                 // 인벤토리에서 1개 소비 성공하면 설치
                 if (inventory.Consume(selected, 1))

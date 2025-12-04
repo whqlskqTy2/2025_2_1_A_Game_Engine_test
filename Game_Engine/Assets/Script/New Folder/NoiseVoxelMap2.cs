@@ -17,13 +17,13 @@ public class NoiseVoxelMap2 : MonoBehaviour
     [SerializeField] float noiseScale = 20f;
     [SerializeField] int waterHeight = 4;
 
-    GameObject GetPrefab(BlockType type)
+    GameObject GetPrefab(ItemType type)
     {
         return type switch
         {
-            BlockType.Dirt => dirtPrefab,
-            BlockType.Grass => grassPrefab,
-            BlockType.Water => waterPrefab,
+            ItemType.Dirt => dirtPrefab,
+            ItemType.Grass => grassPrefab,
+            ItemType.Water => waterPrefab,
             _ => null
         };
     }
@@ -34,7 +34,7 @@ public class NoiseVoxelMap2 : MonoBehaviour
         SpawnTestBlocks(); //  BlockSpawner 
     }
 
-    public void PlaceTile(Vector3Int pos, BlockType type)
+    public void PlaceTile(Vector3Int pos, ItemType type)
     {
         GameObject prefab = GetPrefab(type);
 
@@ -81,15 +81,15 @@ public class NoiseVoxelMap2 : MonoBehaviour
                 for (int y = 0; y < h; y++)
                 {
                     if (y == h - 1)
-                        Place(grassPrefab, BlockType.Grass, x, y, z);
+                        Place(grassPrefab, ItemType.Grass, x, y, z);
                     else
-                        Place(dirtPrefab, BlockType.Dirt, x, y, z);
+                        Place(dirtPrefab, ItemType.Dirt, x, y, z);
                 }
 
                 // ¹° »ý¼º
                 for (int y = h; y < waterHeight; y++)
                 {
-                    Place(waterPrefab, BlockType.Water, x, y, z);
+                    Place(waterPrefab, ItemType.Water, x, y, z);
                 }
             }
         }
@@ -100,13 +100,13 @@ public class NoiseVoxelMap2 : MonoBehaviour
     {
         Vector3 start = new Vector3(-2, 0, 0);
 
-        Place(dirtPrefab, BlockType.Dirt, (int)start.x, (int)start.y, (int)start.z);
-        Place(grassPrefab, BlockType.Grass, (int)start.x + 2, (int)start.y, (int)start.z);
-        Place(waterPrefab, BlockType.Water, (int)start.x + 4, (int)start.y, (int)start.z);
+        Place(dirtPrefab, ItemType.Dirt, (int)start.x, (int)start.y, (int)start.z);
+        Place(grassPrefab, ItemType.Grass, (int)start.x + 2, (int)start.y, (int)start.z);
+        Place(waterPrefab, ItemType.Water, (int)start.x + 4, (int)start.y, (int)start.z);
     }
 
   
-    private void Place(GameObject prefab, BlockType type, int x, int y, int z)
+    private void Place(GameObject prefab, ItemType type, int x, int y, int z)
     {
         var go = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity, transform);
         go.name = $"{prefab.name}_{x}_{y}_{z}";
@@ -116,19 +116,19 @@ public class NoiseVoxelMap2 : MonoBehaviour
 
         switch (type)
         {
-            case BlockType.Dirt:
+            case ItemType.Dirt:
                 b.maxHP = 3;
                 b.dropCount = 1;
                 b.mineable = true;
                 break;
 
-            case BlockType.Grass:
+            case ItemType.Grass:
                 b.maxHP = 4;
                 b.dropCount = 1;
                 b.mineable = true;
                 break;
 
-            case BlockType.Water:
+            case ItemType.Water:
                 b.maxHP = 1;
                 b.dropCount = 0;
                 b.mineable = false;
