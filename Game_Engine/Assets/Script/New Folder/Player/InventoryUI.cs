@@ -10,12 +10,13 @@ public class InventoryUI : MonoBehaviour
     public GameObject SlotItem;
 
     // 실제 슬롯에 생성된 아이템들
-    private List<GameObject> items = new List<GameObject>();
+    private readonly List<GameObject> items = new List<GameObject>();
 
     [Header("아이템 아이콘 설정")]
     public Sprite dirtIcon;
     public Sprite grassIcon;
     public Sprite waterIcon;
+    public Sprite towerSpeedIcon;   // 타워 공속 버프 아이템 아이콘
 
     // 인벤토리 참조
     public Inventory targetInventory;
@@ -44,6 +45,7 @@ public class InventoryUI : MonoBehaviour
         foreach (var slotItem in items)
             Destroy(slotItem);
         items.Clear();
+
         selectedIndex = -1;
         ResetSelection();
 
@@ -56,18 +58,26 @@ public class InventoryUI : MonoBehaviour
             go.transform.localPosition = Vector3.zero;
             items.Add(go);
 
-            SlotItemPrefab sItem = go.GetComponent<SlotItemPrefab>();
+            var sItem = go.GetComponent<SlotItemPrefab>();
 
             Sprite icon = null;
-
             // 아이템 수량 표시 (이름 대신)
             string label = item.Value.ToString();
 
             switch (item.Key)
             {
-                case ItemType.Dirt: icon = dirtIcon; break;
-                case ItemType.Grass: icon = grassIcon; break;
-                case ItemType.Water: icon = waterIcon; break;
+                case ItemType.Dirt:
+                    icon = dirtIcon;
+                    break;
+                case ItemType.Grass:
+                    icon = grassIcon;
+                    break;
+                case ItemType.Water:
+                    icon = waterIcon;
+                    break;
+                case ItemType.TowerSpeedUp:
+                    icon = towerSpeedIcon;
+                    break;
             }
 
             if (sItem != null)
@@ -79,6 +89,7 @@ public class InventoryUI : MonoBehaviour
 
     void Update()
     {
+        // 1~9번 키로 슬롯 선택
         for (int i = 0; i < Mathf.Min(9, Slot.Count); i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
@@ -112,19 +123,27 @@ public class InventoryUI : MonoBehaviour
     {
         foreach (var slot in Slot)
         {
-            slot.GetComponent<Image>().color = Color.white;
+            var img = slot.GetComponent<Image>();
+            if (img != null)
+                img.color = Color.white;
         }
     }
 
     public void SetSelection(int idx)
     {
-        Slot[idx].GetComponent<Image>().color = Color.yellow;
+        var img = Slot[idx].GetComponent<Image>();
+        if (img != null)
+            img.color = Color.yellow;
     }
 
     public ItemType GetInventorySlot()
     {
+        // 방어 코드: 선택 안 되어 있으면 기본값 반환
+        if (selectedIndex < 0 || selectedIndex >= items.Count)
+            return default;
+
         return items[selectedIndex]
             .GetComponent<SlotItemPrefab>()
-            .blockType;
+            .itemType;   // ★ SlotItemPrefab 쪽 필드 이름에 맞춰서
     }
 }

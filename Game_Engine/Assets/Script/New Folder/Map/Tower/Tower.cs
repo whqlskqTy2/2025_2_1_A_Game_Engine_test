@@ -77,6 +77,25 @@ public class Tower : MonoBehaviour
         }
     }
 
+    // ★ 타워 공격속도 버프 적용 함수
+    public void ApplyAttackSpeedBuff(float multiplier, float duration)
+    {
+        StartCoroutine(AttackSpeedBuffRoutine(multiplier, duration));
+    }
+
+    private IEnumerator AttackSpeedBuffRoutine(float multiplier, float duration)
+    {
+        float original = fireRate;
+        fireRate = original * multiplier;
+
+        Debug.Log($"[Tower] 공속 버프 적용: x{multiplier}, {duration}초 (원래 {original} → {fireRate})");
+
+        yield return new WaitForSeconds(duration);
+
+        fireRate = original;
+        Debug.Log("[Tower] 공속 버프 종료, 원래 속도로 복구");
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
