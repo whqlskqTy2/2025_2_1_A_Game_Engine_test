@@ -13,7 +13,7 @@ public class Inventory : MonoBehaviour
         invenUI = FindObjectOfType<InventoryUI>();
 
         // ★ 테스트용: 시작할 때 버프 아이템 3개 지급
-        Add(ItemType.TowerSpeedUp, 3);
+        //Add(ItemType.TowerSpeedUp, 3);
     }
 
     public int GetCount(ItemType id)

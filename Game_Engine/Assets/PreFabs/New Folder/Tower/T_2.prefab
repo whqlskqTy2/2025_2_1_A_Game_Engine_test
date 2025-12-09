@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1069179978545701513}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: firePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,6 +99,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: T_2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 432a0532471df514d9af1f02085a900d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 432a0532471df514d9af1f02085a900d, type: 3}
+      propertyPath: m_TagString
+      value: Tower
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 432a0532471df514d9af1f02085a900d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -109,6 +121,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 432a0532471df514d9af1f02085a900d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1924653869030702544}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 432a0532471df514d9af1f02085a900d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1600741279619003344}
   m_SourcePrefab: {fileID: 100100000, guid: 432a0532471df514d9af1f02085a900d, type: 3}
 --- !u!4 &2753994000733370319 stripped
 Transform:
@@ -137,3 +152,24 @@ MonoBehaviour:
   damage: 5
   firePoint: {fileID: 1069179978545701513}
   projectilePrefab: {fileID: 1824659863173051844, guid: a2217f830b1345e44ad27068f94dc7ff, type: 3}
+--- !u!65 &1600741279619003344
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3275232243352907125}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

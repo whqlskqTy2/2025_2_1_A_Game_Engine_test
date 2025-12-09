@@ -17,7 +17,7 @@ MonoBehaviour:
   - type: 0
     count: 1
   - type: 1
-    count: 1
+    count: 2
   outputs:
-  - type: 0
-    count: 3
+  - type: 3
+    count: 1

@@ -41,7 +41,16 @@ public class InventoryUI : MonoBehaviour
     // UI 다시 그리기
     public void UpdateInventory(Inventory myInven)
     {
-        // 기존 슬롯 UI 제거
+        // 1) 슬롯 안에 있는 모든 자식(아이템 UI) 싹 제거
+        foreach (var slot in Slot)
+        {
+            for (int i = slot.childCount - 1; i >= 0; i--)
+            {
+                Destroy(slot.GetChild(i).gameObject);
+            }
+        }
+
+        // 2) 스크립트가 관리하던 리스트도 비우기
         foreach (var slotItem in items)
             Destroy(slotItem);
         items.Clear();
@@ -49,6 +58,7 @@ public class InventoryUI : MonoBehaviour
         selectedIndex = -1;
         ResetSelection();
 
+        // 3) 실제 인벤토리 내용대로 다시 생성
         int idx = 0;
         foreach (var item in myInven.items)
         {
@@ -61,23 +71,14 @@ public class InventoryUI : MonoBehaviour
             var sItem = go.GetComponent<SlotItemPrefab>();
 
             Sprite icon = null;
-            // 아이템 수량 표시 (이름 대신)
             string label = item.Value.ToString();
 
             switch (item.Key)
             {
-                case ItemType.Dirt:
-                    icon = dirtIcon;
-                    break;
-                case ItemType.Grass:
-                    icon = grassIcon;
-                    break;
-                case ItemType.Water:
-                    icon = waterIcon;
-                    break;
-                case ItemType.TowerSpeedUp:
-                    icon = towerSpeedIcon;
-                    break;
+                case ItemType.Dirt: icon = dirtIcon; break;
+                case ItemType.Grass: icon = grassIcon; break;
+                case ItemType.Water: icon = waterIcon; break;
+                case ItemType.TowerSpeedUp: icon = towerSpeedIcon; break;
             }
 
             if (sItem != null)
@@ -86,7 +87,6 @@ public class InventoryUI : MonoBehaviour
             idx++;
         }
     }
-
     void Update()
     {
         // 1~9번 키로 슬롯 선택

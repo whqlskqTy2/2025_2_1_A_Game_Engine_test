@@ -18,12 +18,12 @@ public class PlayerHarvester : MonoBehaviour
     {
         _cam = Camera.main;
 
-   
         if (inventory == null)
             inventory = GetComponent<Inventory>();
 
         invenUI = FindAnyObjectByType<InventoryUI>();
     }
+
     void Update()
     {
         // -------------------------------
@@ -31,6 +31,9 @@ public class PlayerHarvester : MonoBehaviour
         // -------------------------------
         if (Input.GetMouseButton(0) && Time.time >= _nextHitTime)
         {
+            if (invenUI == null)
+                return;
+
             // 선택된 슬롯이 없다면 → 채굴모드
             if (invenUI.selectedIndex < 0)
             {
@@ -51,18 +54,28 @@ public class PlayerHarvester : MonoBehaviour
         // -------------------------------
         // 2) 블록 설치 (오른쪽 클릭)
         // -------------------------------
+
+
         if (Input.GetMouseButtonDown(1))
         {
             // 선택된 슬롯이 없으면 설치 불가
             if (invenUI.selectedIndex < 0)
                 return;
 
+            // 현재 선택된 인벤 아이템 타입
+            ItemType selected = invenUI.GetInventorySlot();
+
+            // ★ TowerSpeedUp 같은 소모 아이템은 설치하지 않는다
+            if (selected == ItemType.TowerSpeedUp)
+            {
+                Debug.Log("[PlayerHarvester] TowerSpeedUp 은 블록이 아니라 소모 아이템입니다. 설치 X");
+                return;
+            }
+
             Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             if (Physics.Raycast(ray, out var hit, rayDistance, hitMask))
             {
                 Vector3Int placePos = AdjacentCellOnHitFace(hit);
-
-                ItemType selected = invenUI.GetInventorySlot();
 
                 // 인벤토리에서 1개 소비 성공하면 설치
                 if (inventory.Consume(selected, 1))
